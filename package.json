@@ -1,0 +1,13 @@
+{
+  "name": "livekit-realtime-online-coach",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev:token": "npm run dev --workspace=token-server",
+    "dev:agent": "npm run dev --workspace=agent",
+    "dev:mobile": "npm run start --workspace=mobile",
+    "build": "npm run build --workspaces --if-present",
+    "test:livekit": "node scripts/test-livekit.mjs"
+  }
+}

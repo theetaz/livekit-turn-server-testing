@@ -1,0 +1,20 @@
+# Production compose with nginx reverse proxy for public HTTPS access.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Prerequisites:
+# 1. Point your domain (e.g. token.yourdomain.com) to your server IP
+# 2. Create ./certs/ and add SSL certs, or use certbot to obtain them
+# 3. Set TOKEN_SERVER_DOMAIN in .env
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/certs:/etc/nginx/certs:ro
+    depends_on:
+      - token-server
+    restart: unless-stopped
