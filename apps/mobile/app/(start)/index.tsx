@@ -11,7 +11,7 @@ import {
 
 export default function StartScreen() {
   const router = useRouter();
-  const { isConnectionActive, connect } = useConnection();
+  const { isConnectionActive, error, connect } = useConnection();
 
   useEffect(() => {
     if (isConnectionActive) router.navigate('../assistant');
@@ -23,9 +23,12 @@ export default function StartScreen() {
     <View style={styles.container}>
       <Text style={styles.logo}>🎙️</Text>
       <Text style={styles.text}>Chat with your AI English teacher</Text>
+      {error ? (
+        <Text style={styles.error}>{error}</Text>
+      ) : null}
 
       <TouchableOpacity
-        onPress={() => connect()}
+        onPress={() => connect().catch(() => {})}
         style={styles.button}
         activeOpacity={0.7}
         disabled={isConnectionActive}
@@ -69,5 +72,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#ffffff',
+  },
+  error: {
+    color: '#ff6b6b',
+    marginBottom: 16,
+    textAlign: 'center',
+    paddingHorizontal: 24,
   },
 });

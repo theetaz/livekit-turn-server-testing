@@ -16,6 +16,10 @@ dotenv.config();
 
 export default defineAgent({
   entry: async (ctx: JobContext) => {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not set — Realtime API requires it');
+    }
+
     const session = new voice.AgentSession({
       llm: new openai.realtime.RealtimeModel({
         voice: 'marin',
@@ -46,15 +50,18 @@ export default defineAgent({
 
     await ctx.connect();
 
-    session.generateReply({
+    const handle = session.generateReply({
       instructions: 'Greet the user warmly as their English teacher. Invite them to practice.',
     });
+    await handle.waitForPlayout();
   },
 });
+
+const agentName = process.env.AGENT_NAME ?? 'english-teacher';
 
 cli.runApp(
   new ServerOptions({
     agent: fileURLToPath(import.meta.url),
-    agentName: 'english-teacher',
+    agentName,
   })
 );

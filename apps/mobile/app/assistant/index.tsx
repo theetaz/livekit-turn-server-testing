@@ -9,7 +9,6 @@ import {
 
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  AudioSession,
   useIOSAudioManagement,
   useLocalParticipant,
   useParticipantTracks,
@@ -31,16 +30,6 @@ import {
 import { useConnection } from '@/hooks/useConnection';
 
 export default function AssistantScreen() {
-  useEffect(() => {
-    const start = async () => {
-      await AudioSession.startAudioSession();
-    };
-    start();
-    return () => {
-      AudioSession.stopAudioSession();
-    };
-  }, []);
-
   return (
     <SafeAreaView>
       <RoomView />

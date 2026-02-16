@@ -9,7 +9,7 @@ import {
 
 dotenv.config();
 
-const AGENT_NAME = 'english-teacher';
+const AGENT_NAME = process.env.AGENT_NAME ?? 'english-teacher';
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -30,14 +30,14 @@ app.post('/token', async (req, res) => {
 
     const body = req.body as Record<string, unknown>;
     const roomName =
-      (body.room_name as string) ?? (body.roomName as string) ?? 'english-coach-room';
+      (body.room_name as string) || (body.roomName as string) || 'english-coach-room';
     const participantIdentity =
-      (body.participant_identity as string) ??
-      (body.participantIdentity as string) ??
+      (body.participant_identity as string) ||
+      (body.participantIdentity as string) ||
       `user-${Date.now()}`;
     const participantName =
-      (body.participant_name as string) ??
-      (body.participantName as string) ??
+      (body.participant_name as string) ||
+      (body.participantName as string) ||
       participantIdentity;
 
     const at = new AccessToken(apiKey, apiSecret, {
