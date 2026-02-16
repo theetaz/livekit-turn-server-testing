@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY apps/agent/ ./apps/agent/
@@ -6,7 +6,8 @@ COPY apps/token-server/package.json ./apps/token-server/
 RUN npm install --workspace=agent
 RUN npm run build --workspace=agent
 
-FROM node:20-alpine
+FROM node:20-slim
+RUN apt-get update && apt-get install -y --no-install-recommends libglib2.0-0 && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/node_modules ./node_modules
